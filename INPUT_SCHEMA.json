@@ -153,8 +153,18 @@
     }
   },
   "required": [
-    "url",
-    "email",
-    "password"
+    "loginEmail",
+    "password",
+    "customerName",
+    "customerPhone",
+    "partnerId",
+    "price",
+    "paymentMethod",
+    "branchId",
+    "pickupRequiredEnd",
+    "pickupRequiredStart",
+    "addressRawValue",
+    "dropRequiredEnd",
+    "dropRequiredStart"
   ]
 }
