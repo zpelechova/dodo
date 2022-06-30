@@ -1,0 +1,160 @@
+{
+  "title": "PuppeteerCrawler Template",
+  "description": "Fill in URL of you dashboards and you credentials on Tableu Public and the actor will request data refresh for you.",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "url": {
+      "title": "URL",
+      "type": "string",
+      "description": "Tableau public URL where you want to update the dashboard/ request data update automatically.",
+      "editor": "textfield",
+      "prefill": "https://public.tableau.com/app/profile/pablolgomez/viz/HappinessintheWorld_16245341657220/WHR"
+    },
+    "loginEmail": {
+      "title": "Email",
+      "type": "string",
+      "description": "Email to your account.",
+      "editor": "textfield",
+      "prefill": "my.email@example.com"
+    },
+    "password": {
+      "title": "Password",
+      "type": "string",
+      "description": "Password to your account.",
+      "editor": "textfield",
+      "prefill": "my_password"
+    },
+    "customerName": {
+      "title": "customerName",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "customerPhone": {
+      "title": "customerPhone",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "customerEmail": {
+      "title": "customerEmail",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "partnerId": {
+      "title": "partnerId",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "price": {
+      "title": "price",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "paymentMethod": {
+      "title": "paymentMethod",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "branchId": {
+      "title": "branchId",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "pickupRequiredEnd": {
+      "title": "requiredEnd",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "pickupRequiredStart": {
+      "title": "requiredStart",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "pickupNote": {
+      "title": "note",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "addressRawValue": {
+      "title": "addressRawValue",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "companyName": {
+      "title": "companyName",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "contactName": {
+      "title": "contactName",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "companyRegistrationNumber": {
+      "title": "companyRegistrationNumber",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "floorNumber": {
+      "title": "floorNumber",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "dropNote": {
+      "title": "note",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "dropRequiredEnd": {
+      "title": "requiredEnd",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "dropRequiredStart": {
+      "title": "requiredStart",
+      "type": "string",
+      "description": "",
+      "editor": "textfield",
+      "prefill": ""
+    }
+  },
+  "required": [
+    "url",
+    "email",
+    "password"
+  ]
+}
