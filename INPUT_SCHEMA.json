@@ -9,10 +9,10 @@
       "type": "string",
       "description": "Tableau public URL where you want to update the dashboard/ request data update automatically.",
       "editor": "textfield",
-      "prefill": "https://public.tableau.com/app/profile/pablolgomez/viz/HappinessintheWorld_16245341657220/WHR"
+      "prefill": "https://portal-dev.gaia.delivery/"
     },
     "loginEmail": {
-      "title": "Email",
+      "title": "Login email",
       "type": "string",
       "description": "Email to your account.",
       "editor": "textfield",
@@ -51,7 +51,7 @@
       "type": "string",
       "description": "",
       "editor": "textfield",
-      "prefill": ""
+      "prefill": "333"
     },
     "price": {
       "title": "price",
@@ -72,7 +72,7 @@
       "type": "string",
       "description": "",
       "editor": "textfield",
-      "prefill": ""
+      "prefill": "9178"
     },
     "pickupRequiredEnd": {
       "title": "requiredEnd",
