@@ -4,7 +4,12 @@ const {
     utils: { log, puppeteer, sleep },
 } = Apify;
 
-let access_token;
+let accessToken = '';
+
+const saveErrorAndThrow = async (error) => {
+    await Apify.setValue('OUTPUT', { error: error.message });
+    throw error;
+};
 
 Apify.main(async () => {
     const { loginEmail, password, customerName, customerPhone, customerEmail, partnerId, price, paymentMethod, branchId, pickupRequiredEnd, pickupRequiredStart, pickupNote, addressRawValue, companyName, contactName, companyRegistrationNumber, floorNumber, dropNote, dropRequiredEnd, dropRequiredStart, proxy } = await Apify.getInput();
@@ -20,34 +25,68 @@ Apify.main(async () => {
     const puppeteerCrawler = new Apify.PuppeteerCrawler({
         requestList,
         proxyConfiguration,
+        handlePageTimeoutSecs: 120,
+        maxRequestRetries: 2,
         handlePageFunction: async ({ page, request }) => {
             page.on('response', async (response) => {
                 try {
                     if (
-                        response.request().url()
+                        accessToken // if access token is already set
+                        || response.request().url()
                         !== 'https://idodo-dev.eu.auth0.com/oauth/token'
                     ) {
                         return;
                     }
                     const json = await response.json();
-                    access_token = json.access_token;
+                    accessToken = json.access_token;
                 } catch (error) {
-                    console.log('This was not the correct response.');
+                    // this can crash if page was closed
+                    log.exception(error, 'This was not the correct response.');
                 }
             });
             await puppeteer.injectJQuery(page);
+
+            const submitBtn = 'button[type="submit"]';
+            await page.waitForSelector(submitBtn);
+
+            const [button] = await page.$$(submitBtn);
+
+            if (!button) {
+                throw new Error('Login button not found');
+            }
 
             log.info('Login page opened.', { url: request.url });
             log.info('Signing in...');
 
             await page.type('#username', loginEmail, { delay: 100 });
             await page.type('#password', password, { delay: 100 });
-            // await page.waitForTimeout(5000);
 
-            await page.evaluate(() => $('button:contains(Continue)').click());
-            await page.waitForTimeout(20000);
-            console.log(access_token);
-            log.info('Signed in.');
+            let looping = true;
+
+            await Promise.race([
+                Promise.all([
+                    (async () => {
+                        while (looping) {
+                            if (accessToken) {
+                                looping = false;
+                                break;
+                            }
+
+                            await sleep(100);
+                        }
+                    })(),
+                    button.click(),
+                ]),
+                sleep(30000),
+            ]);
+
+            looping = false;
+
+            if (!accessToken) {
+                throw new Error('Login failed');
+            } else {
+                log.info('Signed in.');
+            }
         },
     });
 
@@ -55,24 +94,39 @@ Apify.main(async () => {
     await puppeteerCrawler.run();
     log.info('The process of signing in has finished.');
 
+    if (!accessToken) {
+        await saveErrorAndThrow(`access_token could not be fetched`);
+    }
+
+    let wasSuccessiful = false;
+
     const cheerioCrawler = new Apify.CheerioCrawler({
         requestList: await Apify.openRequestList('missionUrl', [
             {
                 url: missionUrl,
                 method: POST,
                 headers: {
-                    authorization: `Bearer ${access_token}`,
+                    authorization: `Bearer ${accessToken}`,
                     'content-type': 'application/json',
                 },
                 payload: JSON.stringify(testData),
             },
         ]),
         proxyConfiguration,
-        handlePageFunction() {},
+        async handlePageFunction({ response }) {
+            wasSuccessiful = wasSuccessiful || response.statusCode === 200;
+        },
         additionalMimeTypes: ['application/octet-stream'],
     });
 
     log.info('The process has started.');
     await cheerioCrawler.run();
+
+    if (!wasSuccessiful) {
+        await saveErrorAndThrow(`missionUrl payload failed`);
+    }
+
+    await Apify.setValue('OUTPUT', { accessToken });
+
     log.info('The process has finished.');
 });
